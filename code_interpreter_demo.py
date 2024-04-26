@@ -4,7 +4,7 @@ import re
 from matplotlib.font_manager import FontProperties
 
 def model_chat(query):
-    system_prompt = "你是一个智能的编程助手，你需要使用python完成用户的代码需求。"
+    system_prompt = "Your are a best programmer assistant,your task is to meet customers requirement!"
     system_info = {
         "role":"system",
         "content" : system_prompt
@@ -21,13 +21,13 @@ def model_chat(query):
         try:
             code = re.findall("```python(.*?)```",res,re.DOTALL)[0]
         except:
-            print( "答案中不包含python代码")
+            print( "The answer does not contain any python code!!!")
             continue
         
         try:
             compile(code,"<string>","exec")
         except:
-            print( "生成的python代码有误！")
+            print( "Your python code have something wrong!!!")
             continue
 
         try:
@@ -36,16 +36,16 @@ def model_chat(query):
             import numpy as np
             out_dict = {}
             exec(code,{"np":np},out_dict)
-            print("执行成功哦～")
+            print("Success exc!!!")
             
-            result = f"排序前：{out_dict.get('arr1','')}\n排序后：{out_dict.get('arr2','')}"
+            result = f"Before sorted：{out_dict.get('arr1','')}\n After sorted{out_dict.get('arr2','')}"
 
             return result
         except:
-            print( "执行代码报错")
+            print( "Bad exc for wrong code!!!")
             continue
 
-    return "超时"
+    return "There happened the overtime!!!"
 
     
 
@@ -57,6 +57,6 @@ if __name__ == '__main__':
     model = AutoModel.from_pretrained("/mnt/sdb/models/chatglm3_6b_chat", trust_remote_code=True).cuda()
     model = model.eval()
     while True:
-        query = input("请输入：") # 帮我写一个冒泡排序的代码,排序前的变量为：arr1，排序后的变量为：arr2，不要改变arr1中的值   帮我画一个爱心图,并保存 帮我画一张饼图并保存，【1月 ，2月，3月】，值：【20，30,10】
+        query = input("Please input:")   ##your real requirement
         response = model_chat(query)
         print(response)
